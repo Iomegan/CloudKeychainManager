@@ -31,7 +31,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Init
 
-    public init(keychainGroup: String, loggingSubsystem: String) {
+    private init(keychainGroup: String, loggingSubsystem: String) {
         if keychainGroup.isEmpty || loggingSubsystem.isEmpty {
             fatalError("keychainGroup and loggingSubsystem may not be empty strings.")
         }
@@ -42,7 +42,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Setup Shared Instance
 
-    static func initializeShared(keychainGroup: String, subsystem: String) {
+    public static func initializeShared(keychainGroup: String, subsystem: String) {
         _shared = CloudKeychainManager(keychainGroup: keychainGroup, loggingSubsystem: subsystem)
     }
 
