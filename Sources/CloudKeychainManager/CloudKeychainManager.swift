@@ -12,24 +12,24 @@ import os.log
 public actor CloudKeychainManager {
     // MARK: - Properties
     
-    nonisolated let logger: Logger
-    static let shared = CloudKeychainManager()
+    nonisolated private let logger: Logger
+    public static let shared = CloudKeychainManager()
     
     /// Example: "XYZ123456Z.com.example.com.App-Name"
-    var keychainGroup: String?
+    public var keychainGroup: String?
     
     /// Example: "com.example.com.App-Name"
-    var subsystem: String?
+    public var subsystem: String?
     
     // MARK: - Init
     
-    init() {
+    private init() {
         logger = Logger(subsystem: subsystem ?? "com.example.com.App-Name", category: "security")
     }
     
     // MARK: - Store
     
-    func store(_ key: String, account: String, name: String) -> Bool {
+    public func store(_ key: String, account: String, name: String) -> Bool {
         guard let keychainGroup else {
             logger.error("Error #4hhrwf - no keychainGroup has been set")
             return false
@@ -74,7 +74,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Retrieve
     
-    func retrieve(account: String) -> String? {
+    public func retrieve(account: String) -> String? {
         guard let keychainGroup else {
             logger.error("Error #hjktr - no keychainGroup has been set")
             return nil
@@ -110,7 +110,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Delete
     
-    func delete(account: String, name: String) -> Bool {
+    public func delete(account: String, name: String) -> Bool {
         guard let keychainGroup else {
             logger.error("Error #r8fkb - no keychainGroup has been set")
             return false
