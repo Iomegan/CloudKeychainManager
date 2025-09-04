@@ -12,29 +12,43 @@ import os.log
 public actor CloudKeychainManager {
     // MARK: - Properties
     
-    nonisolated private let logger: Logger
-    public static let shared = CloudKeychainManager()
+    private nonisolated let logger: Logger
+
+    // MARK: - Shared Instance
+
+    private static var _shared: CloudKeychainManager?
     
-    /// Example: "XYZ123456Z.com.example.com.App-Name"
-    public var keychainGroup: String?
-    
-    /// Example: "com.example.com.App-Name"
-    public var subsystem: String?
-    
-    // MARK: - Init
-    
-    private init() {
-        logger = Logger(subsystem: subsystem ?? "com.example.com.App-Name", category: "security")
+    public static var shared: CloudKeychainManager {
+        guard let instance = _shared else {
+            fatalError("CloudKeychainManager.shared not initialized! Call initializeShared(...) first.")
+        }
+        return instance
     }
     
+    // MARK: - Configuration (immutable)
+
+    private let keychainGroup: String
+    
+    // MARK: - Init
+
+    public init(keychainGroup: String, loggingSubsystem: String) {
+        if keychainGroup.isEmpty || loggingSubsystem.isEmpty {
+            fatalError("keychainGroup and loggingSubsystem may not be empty strings.")
+        }
+
+        self.keychainGroup = keychainGroup
+        logger = Logger(subsystem: loggingSubsystem, category: "security")
+    }
+    
+    // MARK: - Setup Shared Instance
+
+    static func initializeShared(keychainGroup: String, subsystem: String) {
+        _shared = CloudKeychainManager(keychainGroup: keychainGroup, loggingSubsystem: subsystem)
+    }
+
     // MARK: - Store
     
     public func store(_ key: String, account: String, name: String) -> Bool {
-        guard let keychainGroup else {
-            logger.error("Error #4hhrwf - no keychainGroup has been set")
-            return false
-        }
-        
         guard let keyData = key.data(using: .utf8) else { return false }
         
         let query: [String: Any] = [
@@ -75,11 +89,6 @@ public actor CloudKeychainManager {
     // MARK: - Retrieve
     
     public func retrieve(account: String) -> String? {
-        guard let keychainGroup else {
-            logger.error("Error #hjktr - no keychainGroup has been set")
-            return nil
-        }
-        
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: account,
@@ -111,11 +120,6 @@ public actor CloudKeychainManager {
     // MARK: - Delete
     
     public func delete(account: String, name: String) -> Bool {
-        guard let keychainGroup else {
-            logger.error("Error #r8fkb - no keychainGroup has been set")
-            return false
-        }
-        
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: account,
