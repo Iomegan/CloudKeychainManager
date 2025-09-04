@@ -9,7 +9,7 @@ import Foundation
 import os.log
 
 /// Thread-safe Keychain manager for storing secrets across apps and iCloud Keychain
-actor CloudKeychainManager {
+public actor CloudKeychainManager {
     // MARK: - Properties
     
     nonisolated let logger: Logger
