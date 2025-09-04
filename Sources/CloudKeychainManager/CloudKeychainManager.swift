@@ -48,7 +48,7 @@ public actor CloudKeychainManager {
 
     // MARK: - Store
     
-    public func store(_ key: String, account: String, name: String) -> Bool {
+    public nonisolated func store(_ key: String, account: String, name: String) -> Bool {
         guard let keyData = key.data(using: .utf8) else { return false }
         
         let query: [String: Any] = [
@@ -88,7 +88,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Retrieve
     
-    public func retrieve(account: String) -> String? {
+    public nonisolated func retrieve(account: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: account,
@@ -119,7 +119,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Delete
     
-    public func delete(account: String, name: String) -> Bool {
+    public nonisolated func delete(account: String, name: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: account,
