@@ -42,6 +42,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Setup Shared Instance
 
+    @MainActor
     public static func initializeShared(keychainGroup: String, subsystem: String) {
         _shared = CloudKeychainManager(keychainGroup: keychainGroup, loggingSubsystem: subsystem)
     }
