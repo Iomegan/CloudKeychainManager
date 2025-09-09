@@ -16,9 +16,9 @@ public actor CloudKeychainManager {
 
     // MARK: - Shared Instance
 
-    private static var _shared: CloudKeychainManager?
+    @MainActor private static var _shared: CloudKeychainManager?
     
-    public static var shared: CloudKeychainManager {
+    @MainActor public static var shared: CloudKeychainManager {
         guard let instance = _shared else {
             fatalError("CloudKeychainManager.shared not initialized! Call initializeShared(...) first.")
         }
@@ -31,7 +31,7 @@ public actor CloudKeychainManager {
     
     // MARK: - Init
 
-    private init(keychainGroup: String, loggingSubsystem: String) {
+    @MainActor private init(keychainGroup: String, loggingSubsystem: String) {
         if keychainGroup.isEmpty || loggingSubsystem.isEmpty {
             fatalError("keychainGroup and loggingSubsystem may not be empty strings.")
         }
